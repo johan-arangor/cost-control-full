@@ -1,17 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../infrastructure/database');
 const errors = require('../utils/errors');
+const { User } = require('../models/index');
 
 class HomeController {
   async getIndex(req, res) {
     try {
+      console.log('aca llega');
+
+      console.log('userData', User);
       // Lógica para obtener datos de la base de datos
         //   const data = await db.query('SELECT * FROM tabla');
+        const responseDB = await User.findAll();
         const result = {
             title: 'Página de inicio',
             message: 'Bienvenido a la aplicación',
-            // data: data.rows,
+            data: responseDB,
         };
         
         return res.status(200).json(result);
