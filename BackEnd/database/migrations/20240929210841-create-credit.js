@@ -10,48 +10,63 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4
       },
       dateStart: {
-        type: DataTypes.DATE,
+        type: Sequelize.DATE,
         allowNull: false
       },
       dateEnd: {
-        type: DataTypes.DATE,
+        type: Sequelize.DATE,
         allowNull: true
       },
       description: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
+      },
+      userId: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
       },
       subcategoryId: {
-        type: DataTypes.UUID,
-        allowNull: false
+        type: Sequelize.UUID,
+        references: {
+          model: 'SubCategory',
+          key: 'id'
+        }
       },
       amount: {
-        type: DataTypes.DECIMAL,
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: false
       },
       numberPayments: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false
       },
       paymentsMade: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false
       },
       amountPayment: {
-        type: DataTypes.DECIMAL,
+        type: Sequelize.DECIMAL,
         allowNull: false
       },
       interest: {
-        type: DataTypes.DECIMAL,
+        type: Sequelize.DECIMAL,
         allowNull: false
       },
       additionalPayment: {
-        type: DataTypes.DECIMAL,
+        type: Sequelize.DECIMAL,
         allowNull: false
       },
       periocity: {
-        type: DataTypes.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false
+      },
+      state: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
       },
       createdAt: {
         allowNull: false,

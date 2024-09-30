@@ -29,12 +29,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    userId: {
+      type: DataTypes.UUID,
+      references: {
+        model: 'User',
+        key: 'id'
+      }
+    },
     subcategoryId: {
       type: DataTypes.UUID,
-      allowNull: false
+      references: {
+        model: 'SubCategory',
+        key: 'id'
+      }
     },
     amount: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false
     },
     numberPayments: {
@@ -58,9 +68,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     periocity: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false
-    }
+    },
+    state: {
+      type: DataTypes.BOOLEAN,
+      allowNull:false,
+      defaultValue: true
+    },
   }, {
     sequelize,
     modelName: 'Credit',
