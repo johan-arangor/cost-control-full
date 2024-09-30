@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     amount: {
       type: DataTypes.DECIMAL(10, 2),
@@ -63,6 +63,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Expense',
   });
-  
+
   return Expense;
 };
