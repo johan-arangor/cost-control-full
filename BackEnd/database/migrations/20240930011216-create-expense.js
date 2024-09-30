@@ -35,7 +35,7 @@ module.exports = {
           key: 'id'
         }
       },
-      vehicule: {
+      vehiculeId: {
         type: Sequelize.UUID,
         references: {
           model: 'Vehicule',
