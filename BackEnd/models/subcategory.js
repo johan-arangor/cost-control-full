@@ -1,11 +1,10 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class SubCategory extends Model {
     static associate(models) {
-      Credit.belongsTo(models.Category, { foreignKey: 'categoryId' });
+      // Credit.belongsTo(models.Category, { foreignKey: 'categoryId' });
     }
   }
   SubCategory.init({
@@ -21,10 +20,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     categoryId: {
       type: DataTypes.UUID,
-      references: {
-        model: 'Category',
-        key: 'id'
-      }
+      // references: {
+      //   model: 'Category',
+      //   key: 'id'
+      // }
     },
     state: {
       type: DataTypes.BOOLEAN,

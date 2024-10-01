@@ -5,8 +5,8 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Credit extends Model {
     static associate(models) {
-      Credit.belongsTo(models.User, { foreignKey: 'userId' });
-      Credit.belongsTo(models.Subcategory, { foreignKey: 'subcategoryId' });
+      // Credit.belongsTo(models.User, { foreignKey: 'userId' });
+      // Credit.belongsTo(models.Subcategory, { foreignKey: 'subcategoryId' });
     }
   }
 
@@ -31,17 +31,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: {
       type: DataTypes.UUID,
-      references: {
-        model: 'User',
-        key: 'id'
-      }
+      // references: {
+      //   model: 'User',
+      //   key: 'id'
+      // }
     },
     subcategoryId: {
       type: DataTypes.UUID,
-      references: {
-        model: 'SubCategory',
-        key: 'id'
-      }
+      // references: {
+      //   model: 'SubCategory',
+      //   key: 'id'
+      // }
     },
     amount: {
       type: DataTypes.DECIMAL(10, 2),

@@ -1,12 +1,12 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Obligation extends Model {
     static associate(models) {
-      Credit.belongsTo(models.Subcategory, { foreignKey: 'subcategoryId' });
-      Credit.belongsTo(models.Vehicule, { foreignKey: 'vehiculeId' });
+      // Credit.belongsTo(models.Subcategory, { foreignKey: 'subcategoryId' });
+      // Credit.belongsTo(models.Vehicule, { foreignKey: 'vehiculeId' });
     }
   }
 
@@ -35,17 +35,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     subcategoryId: {
       type: DataTypes.UUID,
-      references: {
-        model: 'SubCategory',
-        key: 'id'
-      }
+      // references: {
+      //   model: 'SubCategory',
+      //   key: 'id'
+      // }
     },
     vehiculeId: {
       type: DataTypes.UUID,
-      references: {
-        model: 'Vehicule',
-        key: 'id'
-      }
+      // references: {
+      //   model: 'Vehicule',
+      //   key: 'id'
+      // }
     },
   }, {
     sequelize,

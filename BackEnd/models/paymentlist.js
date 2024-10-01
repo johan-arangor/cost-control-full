@@ -1,11 +1,11 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class paymentList extends Model {
     static associate(models) {
-      Credit.belongsTo(models.Credit, { foreignKey: 'credit' });
+      // Credit.belongsTo(models.Credit, { foreignKey: 'credit' });
     }
   }
   
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     paymentNumber: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     amount: {
@@ -38,10 +38,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     creditId: {
       type: DataTypes.UUID,
-      references: {
-        model: 'Credit',
-        key: 'id'
-      }
+      // references: {
+      //   model: 'Credit',
+      //   key: 'id'
+      // }
     },
   }, {
     sequelize,
