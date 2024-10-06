@@ -3,10 +3,10 @@ const router = express.Router();
 const UserController = require('../controllers/user.controller');
 
 router.post("/login", UserController.login);
-// route.post("/signup", usersControllers.signup);
-// route.get("/confirmAccount/:id", usersControllers.confirmAccount);
-// route.post("/renewAccount", usersControllers.renewPassword);
-// route.get("/changePasswordLink/:id", usersControllers.changePasswordLink);
-// route.post("/changePassword", usersControllers.changePassword);
+router.post("/signup", UserController.signup);
+router.get("/confirmAccount/:id", UserController.confirmAccount);
+router.post("/renewAccount", UserController.renewPassword);
+router.get("/changePasswordLink/:id", UserController.changePasswordLink);
+router.post("/changePassword", UserController.changePassword);
 
 module.exports = router;
