@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { User } = require('../models/index');
 const errors = require('../utils/errors');
 const Cryptr = require('cryptr');
