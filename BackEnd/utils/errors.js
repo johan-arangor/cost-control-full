@@ -32,6 +32,16 @@ const errors = {
         text: 'Contraseña incorrecta',
         type: 'error',
       },
+      TOKEN_EXPIRED: {
+        title: 'Token vencido',
+        text: `El token ya no está disponible, por favor solicite un nuevo cambio de contraseña`,
+        icon: 'error'
+      },
+      TOKEN_NOT_GENERATE: {
+        title: 'Token vencido',
+        text: 'No se pudo generar el Token',
+        icon: 'error'
+      }
     },
     VALIDATION: {
       ERROR: {
@@ -64,6 +74,13 @@ const errors = {
         type,
       };
     },
+    DYNAMIC_GENERAL_ERROR: (message) => {
+      return {
+        title: 'Ocurrió un error inesperado',
+        text: `[Error] ${message}`,
+        type: 'error',
+      };
+    }
   };
   
   module.exports = errors;
