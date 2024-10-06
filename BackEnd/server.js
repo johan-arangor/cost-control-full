@@ -32,8 +32,15 @@ app.listen(PORT_BACK, () => {
 
   // sequelize.sync({ force: true })//para hacer la sincronizacion de la bd
   //sincroniza la bd sin alterar los datos almacenados
-  sequelize.sync({ alter: true })
+  // sequelize.sync({ alter: true })
+  // .then(() => {
+  //   console.log('Se ha establecido la conexión');
+  // });
+  sequelize.authenticate()
   .then(() => {
-    console.log('Se ha establecido la conexión');
+    console.log('Conexión exitosa a la base de datos');
+  })
+  .catch((error) => {
+    console.error('Error al conectar a la base de datos:', error);
   });
 });

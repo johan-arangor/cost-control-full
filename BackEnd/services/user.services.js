@@ -7,7 +7,7 @@ const responses = require('../utils/responses');
 const jwtGenerator = require('../middleware/generateJwt');
 const transporter = require('../middleware/configEmail');
 const templateHTLM = require('../templates/users.templates');
-const { SECRETORPRIVATEKEY, PATH_LINK, VERSION_API } = process.env;
+const { SECRETORPRIVATEKEY, PATH_LINK, VERSION_API, NAME_APP, APP_USER } = process.env;
 
 class UserServices {
     async ValidateUser(user) {
@@ -98,8 +98,8 @@ class UserServices {
         let jwtLink = `${PATH_LINK}/api/${VERSION_API}/confirmAccount/${jwtGenerated}`;
         let messageHtml = templateHTLM.confirmEmail(jwtLink);
     
-        try {
-            await transporter.sendMail({
+        return new Promise((resolve, reject) => {
+            transporter.sendMail({
                 from: {
                     name: NAME_APP,
                     address: APP_USER
@@ -107,10 +107,14 @@ class UserServices {
                 to: user,
                 subject: 'evio de confirmación',
                 html: messageHtml
+            }, (error, info) => {
+                if (error) {
+                    reject(errors.DYNAMIC_GENERAL_ERROR('Error al enviar correo electrónico'));
+                } else {
+                    resolve(responses.RESPONSE_CREATE_ACOUNT);
+                }
             });
-        } catch (error) {
-            return 
-        }
+        });
     }
     
     async SendEmailRenew(user){

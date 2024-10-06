@@ -61,15 +61,13 @@ class UserController {
             await userService.Encrypt(dataForm.password)
               .then(async (passwordEncrypt) => {
                 await userService.SendEmailConfirm(dataForm.user, passwordEncrypt)
-                  .then(() => {
-                    res.status(200)
-                    .send(responses.RESPONSE_CREATE_ACOUNT);
+                  .then((result) => {
+                      res.status(200)
+                      .send(result);
                   })
                   .catch((error) => {
-                    let dynamicError = errors.DYNAMIC_GENERAL_ERROR(error.message);
-
                     res.status(500)
-                    .send(dynamicError);
+                    .send(error);
                   });
               })
               .catch((error) => {
