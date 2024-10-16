@@ -19,12 +19,12 @@ app.use(cors({origin:true}))
 
 //routers
 try {
-    const routesIndex = require('./routes/index.routes');
-    app.use(`/api/${VERSION_API}`, routesIndex);
-  } catch (error) {
-    console.error('Error al definir las rutas:', error);
-    process.exit(1);
-  }
+  const routesIndex = require('./routes/index.routes');
+  app.use(`/api/${VERSION_API}`, routesIndex);
+} catch (error) {
+  console.error('Error al definir las rutas:', error);
+  process.exit(1);
+}
 
 // Iniciar servidor
 app.listen(PORT_BACK, () => {
