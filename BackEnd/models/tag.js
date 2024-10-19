@@ -2,38 +2,34 @@
 
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class SubCategory extends Model {
+  class Tag extends Model {
     static associate(models) {
       // Credit.belongsTo(models.Category, { foreignKey: 'categoryId' });
     }
   }
-  SubCategory.init({
+
+  Tag.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
-    name: {
+    description: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     categoryId: {
       type: DataTypes.UUID,
       // references: {
-      //   model: 'Category',
+      //   model: 'category',
       //   key: 'id'
       // }
-    },
-    state: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true
     }
   }, {
     sequelize,
-    modelName: 'SubCategory',
+    modelName: 'Tag',
   });
-  
-  return SubCategory;
+
+  return Tag;
 };
