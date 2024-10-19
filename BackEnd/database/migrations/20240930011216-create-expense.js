@@ -28,12 +28,9 @@ module.exports = {
           key: 'id'
         }
       },
-      subcategoryId: {
-        type: Sequelize.UUID,
-        references: {
-          model: 'SubCategory',
-          key: 'id'
-        }
+      Tags: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       vehiculeId: {
         type: Sequelize.UUID,

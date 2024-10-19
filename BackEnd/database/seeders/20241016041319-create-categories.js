@@ -1,41 +1,48 @@
 'use strict';
 
+const { v4: uuidv4 } = require('uuid');
+const moment = require('moment'); 
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('Category', [
+    let newDate = moment().format("YYYY-MM-DD");
+
+    let categories = [
       {
-        uuid: uuidv4(),
-        name: 'Income',
+        id: uuidv4(),
+        name: 'INCOME',
         state: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: newDate,
+        updatedAt: newDate
       },
       {
-        uuid: uuidv4(),
-        name: 'Expense',
+        id: uuidv4(),
+        name: 'EXPENSE',
         state: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: newDate,
+        updatedAt: newDate
       },
       {
-        uuid: uuidv4(),
-        name: 'Investment',
+        id: uuidv4(),
+        name: 'INVESTMENT',
         state: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: newDate,
+        updatedAt: newDate
       },
       {
-        uuid: uuidv4(),
-        name: 'Vehicle',
+        id: uuidv4(),
+        name: 'VEHICLE',
         state: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: newDate,
+        updatedAt: newDate
       }
-    ]);
+    ];
+
+    await queryInterface.bulkInsert('Categories', categories, {});
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Category', null, {});
+    await queryInterface.bulkDelete('Categories', null, {});
   }
 };
