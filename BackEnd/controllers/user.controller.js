@@ -12,7 +12,7 @@ class UserController {
 
       await userService.ValidateUser(dataForm.user)
         .then(async (validateUser) => {
-          if (validateUser.state){
+          if (validateUser.status){
             await userService.Decrypt(validateUser.data.password)
                 .then(async (passwordDecrypt) => {
                   await userService.ValidateCredentials(validateUser.data.id, dataForm.user, dataForm.password, passwordDecrypt)
@@ -60,7 +60,7 @@ class UserController {
           if (!validateUser.state){
             await userService.Encrypt(dataForm.password)
               .then(async (passwordEncrypt) => {
-                await userService.SendEmailConfirm(dataForm.user, passwordEncrypt)
+                await userService.SendEmailConfirm(dataForm.names, dataForm.lastNames, dataForm.user, passwordEncrypt)
                   .then((result) => {
                       res.status(200)
                       .send(result);
@@ -99,17 +99,22 @@ class UserController {
 
       await jwtGenerator.decodeJwt(req.params.id)
         .then(async (jwtDecode) => {
-            await userService.ValidateUser(jwtDecode.user)
+          console.log('jwtDecode',jwtDecode)
+            await userService.ValidateUser(jwtDecode.email)
             .then(async (validateUser) => {
-              if (!validateUser.state){
-                await userService.CreateUser(uuidv4(), jwtDecode.user, jwtDecode.password)
-                  .then((userCreate) => {
+              if (!validateUser.status){
+                await userService.CreateUser(uuidv4(), jwtDecode.names, jwtDecode.lastNames, jwtDecode.email, jwtDecode.password)
+                  .then(async(userCreate) => {
+                    await userService.SendEmailCreateUser(jwtDecode.email);
+
                     res.status(200)
                     .send(userCreate);
                   });
               } else {
+                let dynamicError = errors.DYNAMIC_ERROR("Usuario invalido", `el usuario ${jwtDecode.email} ya existe y no se puede crear`, "error");
+                
                 res.status(400)
-                .send(errors.DYNAMIC_ERROR("Usuario invalido", `el usuario ${dataForm.user} ya existe y no se puede crear`, "error"));
+                .send(dynamicError);
               }
             })
             .catch((error) => {
@@ -136,7 +141,7 @@ class UserController {
 
       await userService.ValidateUser(dataForm.user)
         .then(async (validateUser) => {
-            if (validateUser.state){
+            if (validateUser.status){
               await userService.SendEmailRenew(dataForm.user)
                 .then(() => {
                     res.status(200)
@@ -188,7 +193,7 @@ class UserController {
     try {
       let dataForm = req.body.token;
       const userService = new UserService();
-
+      
       await jwtGenerator.decodeJwt(dataForm)
         .then(async (jwtDecode) => {
           await userService.Encrypt(req.body.password)
