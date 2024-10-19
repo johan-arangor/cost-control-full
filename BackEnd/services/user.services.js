@@ -2,12 +2,12 @@ require('dotenv').config();
 const { User } = require('../models/index');
 const errors = require('../utils/errors');
 const Cryptr = require('cryptr');
-const moment = require('moment'); 
 const responses = require('../utils/responses');
 const jwtGenerator = require('../middleware/generateJwt');
 const transporter = require('../middleware/configEmail');
 const templateHTLM = require('../templates/users.templates');
 const { SECRETORPRIVATEKEY, PATH_LINK, VERSION_API, NAME_APP, APP_USER } = process.env;
+const cryptr = new Cryptr(SECRETORPRIVATEKEY);
 
 class UserServices {
     async ValidateUser(user) {
@@ -15,7 +15,7 @@ class UserServices {
             let result = await User.findOne(
                 { where: { email: user } }
             );
-    
+            
             if (result != null) {
                 resolve(responses.RESPONSE_DATA(true, {id: result.id, password: result.password}));
             } else {
@@ -26,30 +26,39 @@ class UserServices {
 
     async Encrypt (valueEncrypt) {
         return new Promise((resolve) => {
-            let cryptr = new Cryptr(SECRETORPRIVATEKEY);
-    
-            resolve(cryptr.encrypt(valueEncrypt));
+            try {
+                let encrypted = cryptr.encrypt(valueEncrypt);
+
+                resolve(encrypted);
+            } catch (error) {
+                reject(`Encryption failed: ${error.message}`);
+            }
         });
     }
 
     async Decrypt (valueEncrypt) {
         return new Promise((resolve) => {
-            let cryptr = new Cryptr(SECRETORPRIVATEKEY);
-    
-            resolve(cryptr.decrypt(valueEncrypt));
+            try {
+                let decrypted = cryptr.decrypt(valueEncrypt);
+
+                resolve(decrypted);
+            } catch (error) {
+                console.log('[errrrrrr]', error)
+                reject(`Decryption failed: ${error.message}`);
+            }
         });
     }
 
-    async CreateUser(uuid, user, passwordEncrypt) {
+    async CreateUser(uuid, names, lastNames, user, passwordEncrypt) {
         return new Promise((resolve, reject) => {
-            let result = Users.create({
+            let result = User.create({
                 id: uuid,
-                user: user,
-                password: passwordEncrypt,
-                dateCreate: moment().format("YYYY-MM-DD"),
-                lastDate: moment().format("YYYY-MM-DD")
+                email: user.toLowerCase(),
+                names: names.toUpperCase(), 
+                lastNames: lastNames.toUpperCase(),
+                password: passwordEncrypt
             });
-    
+
             if(result =! null) {
                 resolve(responses.RESPONSE_CREATE_USER);
             } else {
@@ -60,7 +69,7 @@ class UserServices {
 
     async UpdatePasswordUser(user, passwordEncrypt) {
         return new Promise((resolve, reject) => {
-            let result = Users.update(
+            let result = User.update(
                 { password: passwordEncrypt },
                 { where: { email: user } }
             );
@@ -89,13 +98,15 @@ class UserServices {
         });
     }
     
-    async SendEmailConfirm(user, passwordEncrypt){
+    async SendEmailConfirm(names, lastNames, user, passwordEncrypt){
         let profile = {
-            user: user,
+            names: names,
+            lastNames: lastNames,
+            email: user,
             password: passwordEncrypt
         };
         let jwtGenerated = await jwtGenerator.generateSignIn(profile);
-        let jwtLink = `${PATH_LINK}/api/${VERSION_API}/confirmAccount/${jwtGenerated}`;
+        let jwtLink = `${PATH_LINK}api/${VERSION_API}/user/confirmAccount/${jwtGenerated}`;
         let messageHtml = templateHTLM.confirmEmail(jwtLink);
     
         return new Promise((resolve, reject) => {
@@ -105,7 +116,7 @@ class UserServices {
                     address: APP_USER
                 },
                 to: user,
-                subject: 'evio de confirmación',
+                subject: 'envio de confirmación',
                 html: messageHtml
             }, (error, info) => {
                 if (error) {
@@ -117,12 +128,31 @@ class UserServices {
         });
     }
     
+    async SendEmailCreateUser(user){
+
+        let link = `${PATH_LINK}/api/${VERSION_API}/user/login`;
+        let messageHtml = templateHTLM.confirmCreateUser(link);
+    
+        try {
+            await transporter.sendMail({
+                from: {
+                    name: 'app control cost',
+                    address: APP_USER
+                },
+                to: user,
+                subject: 'confirmación de cuenta creada',
+                html: messageHtml
+            });
+        } catch (error) {
+        }
+    }
+
     async SendEmailRenew(user){
         let profile = {
             user: user
         };
         let jwtGenerated = await jwtGenerator.generateRenew(profile);
-        let jwtLink = `${PATH_LINK}/api/${VERSION_API}/changePassword/${jwtGenerated}`;
+        let jwtLink = `${PATH_LINK}api/${VERSION_API}/user/changePassword/${jwtGenerated}`;
         let messageHtml = templateHTLM.renewPasswordHtml(jwtLink);
     
         try {
@@ -132,7 +162,7 @@ class UserServices {
                     address: APP_USER
                 },
                 to: user,
-                subject: 'envío de recuperación de contraseña',
+                subject: 'solicitud de recuperación de contraseña',
                 html: messageHtml
             });
         } catch (error) {
