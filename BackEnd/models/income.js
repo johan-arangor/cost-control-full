@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
   class Income extends Model {
     static associate(models) {
       // Credit.belongsTo(models.User, { foreignKey: 'userId' });
-      // Credit.belongsTo(models.Subcategory, { foreignKey: 'subcategoryId' });
       // Credit.belongsTo(models.Vehicule, { foreignKey: 'vehiculeId' });
       // Credit.belongsTo(models.Credit, { foreignKey: 'creditId' });
     }
@@ -38,12 +37,8 @@ module.exports = (sequelize, DataTypes) => {
       //   key: 'id'
       // }
     },
-    subcategoryId: {
-      type: DataTypes.UUID,
-      // references: {
-      //   model: 'SubCategory',
-      //   key: 'id'
-      // }
+    tags: {
+      type: DataTypes.STRING
     },
     vehicule: {
       type: DataTypes.UUID,
