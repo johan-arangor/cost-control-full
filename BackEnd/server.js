@@ -30,8 +30,8 @@ try {
 app.listen(PORT_BACK, () => {
   console.log(`Server started on port http://localhost:${PORT_BACK}`);
 
-  // sequelize.sync({ force: true })//para hacer la sincronizacion de la bd
-  //sincroniza la bd sin alterar los datos almacenados
+  //COMENT=>sequelize.sync({ force: true })//para hacer la sincronizacion de la bd
+  //COMENT=>sincroniza la bd sin alterar los datos almacenados
   // sequelize.sync({ alter: true })
   // .then(() => {
   //   console.log('Se ha establecido la conexión');
