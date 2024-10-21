@@ -18,6 +18,10 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false
       },
+      userId: {
+        type: Sequelize.UUID,
+        allowNull: false
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

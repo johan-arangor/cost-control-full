@@ -23,6 +23,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true
+    },
+    userId: {
+      type: DataTypes.UUID,
     }
   }, {
     sequelize,
