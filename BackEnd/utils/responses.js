@@ -38,6 +38,27 @@ const responses = {
     },
     RESPONSE_AUTH: (data) => {
         return data;
+    },
+    CREATE_DINAMIC: (nameTable) => {
+        return {
+            title: `${nameTable} creada con exito`,
+            text: `Se ha creado ${nameTable} de manera exitosa.`,
+            icon: "success"
+        }
+    },
+    UPDATE_DINAMIC: (nameTable) => {
+        return {
+            title: `${nameTable} editado con exito`,
+            text: `Se ha editado ${nameTable} de manera exitosa.`,
+            icon: "success"
+        }
+    },
+    DELETE_DINAMIC: (nameTable) => {
+        return {
+            title: `${nameTable} eliminada con exito`,
+            text: `Se ha eliminado ${nameTable} de manera exitosa.`,
+            icon: "success"
+        }
     }
 }
 
