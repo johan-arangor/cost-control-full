@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
 const errors = require('../utils/errors');
 const responses = require('../utils/responses');
 const UserService = require('../services/user.services');
@@ -103,7 +102,7 @@ class UserController {
             await userService.ValidateUser(jwtDecode.email)
             .then(async (validateUser) => {
               if (!validateUser.status){
-                await userService.CreateUser(uuidv4(), jwtDecode.names, jwtDecode.lastNames, jwtDecode.email, jwtDecode.password)
+                await userService.CreateUser(jwtDecode.names, jwtDecode.lastNames, jwtDecode.email, jwtDecode.password)
                   .then(async(userCreate) => {
                     await userService.SendEmailCreateUser(jwtDecode.email);
 
