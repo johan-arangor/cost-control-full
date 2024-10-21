@@ -8,6 +8,7 @@ const transporter = require('../middleware/configEmail');
 const templateHTLM = require('../templates/users.templates');
 const { SECRETORPRIVATEKEY, PATH_LINK, VERSION_API, NAME_APP, APP_USER } = process.env;
 const cryptr = new Cryptr(SECRETORPRIVATEKEY);
+const { v4: uuidv4 } = require('uuid');
 
 class UserServices {
     async ValidateUser(user) {
@@ -49,21 +50,21 @@ class UserServices {
         });
     }
 
-    async CreateUser(uuid, names, lastNames, user, passwordEncrypt) {
-        return new Promise((resolve, reject) => {
-            let result = User.create({
-                id: uuid,
+    async CreateUser(names, lastNames, user, passwordEncrypt) {
+        return new Promise(async (resolve, reject) => {
+            await User.create({
+                id: uuidv4(),
                 email: user.toLowerCase(),
                 names: names.toUpperCase(), 
                 lastNames: lastNames.toUpperCase(),
                 password: passwordEncrypt
-            });
-
-            if(result =! null) {
-                resolve(responses.RESPONSE_CREATE_USER);
-            } else {
+            }, (err) => {
+                if (err) {
                 reject(errors.GENERAL);
-            }
+                } else {
+                    resolve(responses.RESPONSE_CREATE_USER);
+                }
+            });
         });
     }
 

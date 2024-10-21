@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
       //   model: 'category',
       //   key: 'id'
       // }
+    },
+    userId: {
+      type: DataTypes.UUID,
     }
   }, {
     sequelize,

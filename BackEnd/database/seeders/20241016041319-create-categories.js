@@ -11,31 +11,35 @@ module.exports = {
     let categories = [
       {
         id: uuidv4(),
-        name: 'INCOME',
+        name: 'INGRESO',
         state: 1,
         createdAt: newDate,
-        updatedAt: newDate
+        updatedAt: newDate,
+        userId: uuidv4()
       },
       {
         id: uuidv4(),
-        name: 'EXPENSE',
+        name: 'GASTO',
         state: 1,
         createdAt: newDate,
-        updatedAt: newDate
+        updatedAt: newDate,
+        userId: uuidv4()
       },
       {
         id: uuidv4(),
-        name: 'INVESTMENT',
+        name: 'INVERSION',
         state: 1,
         createdAt: newDate,
-        updatedAt: newDate
+        updatedAt: newDate,
+        userId: uuidv4()
       },
       {
         id: uuidv4(),
-        name: 'VEHICLE',
+        name: 'VEHICULO',
         state: 1,
         createdAt: newDate,
-        updatedAt: newDate
+        updatedAt: newDate,
+        userId: uuidv4()
       }
     ];
 

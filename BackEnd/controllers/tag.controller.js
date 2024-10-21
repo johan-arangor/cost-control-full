@@ -4,11 +4,11 @@ const errors = require('../utils/errors');
 class TagController {
   async newTag(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.body;
         const tagService = new TagService();
   
-        await tagService.CreateTag(dataForm)
-            .then(async (result) => {
+        await tagService.CreateTag(dataForm.description, dataForm.categoryId)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -26,11 +26,12 @@ class TagController {
 
   async getAllTags(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.params;
         const tagService = new TagService();
   
-        await tagService.getAllTag(dataForm)
-            .then(async (result) => {
+        await tagService.GetAllTag(dataForm.userId)
+            .then(async (response) => {
+                console.log('response',response)
                 res.status(200)
                 .send(response);
             })
@@ -48,11 +49,11 @@ class TagController {
 
   async getTagId(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.params;
         const tagService = new TagService();
   
-        await tagService.GetIdTag(dataForm)
-            .then(async (result) => {
+        await tagService.GetIdTag(dataForm.id)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -70,11 +71,10 @@ class TagController {
 
   async editTagId(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.body;
         const tagService = new TagService();
-  
-        await tagService.UpdateTag(dataForm)
-            .then(async (result) => {
+        await tagService.UpdateTag(dataForm.id, dataForm.description, dataForm.categoryId)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -92,11 +92,11 @@ class TagController {
 
   async deleteTagId(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.body;
         const tagService = new TagService();
   
-        await tagService.DeleteTag(dataForm)
-            .then(async (result) => {
+        await tagService.DeleteTag(dataForm.id)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -111,7 +111,6 @@ class TagController {
         .send(dynamicError);
     }
   }
-
 }
 
 module.exports = new TagController();

@@ -67,6 +67,27 @@ const errors = {
         type: 'error',
       },
     },
+    OPERATIOS_DB:{
+      ERROR: (messageError) => {
+        return {
+          title: 'Error de base de datos',
+          text: `No se ejecutó la operación en la base de datos [ERROR]: ${messageError}`,
+          type: 'error',
+        }
+      },
+      ERROR_QUERY: (tableName) => {
+        return {
+          title: 'Error de busqueda',
+          text: `El valor buscado en ${tableName} no se encuentra en la base de datos`,
+          type: 'error',
+        }
+      },
+      ERROR_NO_DATA: {
+        title: 'Error de base de datos',
+        text: 'No se hay registros en la base de datos',
+        type: 'error',
+      }
+    },
     DYNAMIC_ERROR: (title, text, type) => {
       return {
         title,

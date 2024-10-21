@@ -1,38 +1,77 @@
+const { Tag } = require('../models/index');
+const errors = require('../utils/errors');
+const responses = require('../utils/responses');
+const { v4: uuidv4 } = require('uuid');
+
 class TagServices {
-    async ValidateTag(tag) {
-        return new Promise(async (resolve) => {
-            resolve('tag exist');
-        });
+    async GetIdTag(tagId) {
+        try {
+            let result = await Tag.findOne(
+                { where: { id: tagId}}
+            );
+
+            return responses.RESPONSE_DATA(true, {id: result.id, description: result.description, categoryId: result.categoryId});
+        } catch (err) {
+            throw errors.OPERATIOS_DB.ERROR(err.message);
+        }
     }
 
-    async GetIdTag(tag) {
-        return new Promise(async (resolve) => {
-            resolve('tag get id');
-        });
+    async GetAllTag(tagUserId) {
+        try {
+            let result = await Tag.findAll(
+                { where: { userId: tagUserId }}
+            );
+
+            if (result != null) {
+                return responses.RESPONSE_DATA(true, {result});
+            } else {
+                return errors.ERROR_NO_DATA;
+            }
+        } catch (err) {
+            throw errors.OPERATIOS_DB.ERROR;
+        }
     }
 
-    async GetAllTag(tag) {
-        return new Promise(async (resolve) => {
-            resolve('tag get all');
-        });
+    async CreateTag(description, categoryId) {
+        try {
+            await Tag.create({
+                id: uuidv4(),
+                description: description,
+                categoryId: categoryId
+            });
+
+            return responses.CREATE_DINAMIC('tag');
+        } catch (err) {
+            throw errors.OPERATIOS_DB.ERROR(err.message);
+        }
     }
 
-    async CreateTag(tag) {
-        return new Promise(async (resolve) => {
-            resolve('tag create');
-        });
+    async UpdateTag(tagId, newDescription, newCategoryId) {
+        try{
+            await Tag.update(
+                { 
+                    description: newDescription,
+                    categoryId: newCategoryId 
+                },
+                { where: { id: tagId}}
+            );
+
+            return responses.UPDATE_DINAMIC('tag');
+        } catch (err) {
+            throw errors.OPERATIOS_DB.ERROR(err.message);
+        }
     }
 
-    async UpdateTag(tag) {
-        return new Promise(async (resolve) => {
-            resolve('tag update');
-        });
-    }
+    async DeleteTag(tagId) {
+        try {
+            await Tag.destroy(
+                { where: { id: tagId}}
+            );
 
-    async DeleteTag(tag) {
-        return new Promise(async (resolve) => {
-            resolve('tag delete');
-        });
+            return responses.DELETE_DINAMIC('tag');
+        } catch (err) {
+            throw errors.OPERATIOS_DB.ERROR(err.message);
+        }
     }
 }
 
