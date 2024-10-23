@@ -10,7 +10,7 @@ class TagServices {
                 { where: { id: tagId}}
             );
 
-            return responses.RESPONSE_DATA(true, {id: result.id, description: result.description, categoryId: result.categoryId});
+            return responses.RESPONSE_DATA(true, {result});
         } catch (err) {
             throw errors.OPERATIOS_DB.ERROR(err.message);
         }

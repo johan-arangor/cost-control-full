@@ -4,11 +4,11 @@ const errors = require('../utils/errors');
 class VehiculeController {
   async newVehicule(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.body;
         const vehiculeService = new VehiculeService();
   
-        await vehiculeService.CreateVehicule(dataForm)
-            .then(async (result) => {
+        await vehiculeService.CreateVehicule(dataForm.plate, dataForm.make, dataForm.model, dataForm.year, dataForm.userId)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -26,11 +26,11 @@ class VehiculeController {
 
   async getAllVehicules(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.params;
         const vehiculeService = new VehiculeService();
   
-        await vehiculeService.getAllVehicule(dataForm)
-            .then(async (result) => {
+        await vehiculeService.getAllVehicule(dataForm.userId)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -48,11 +48,11 @@ class VehiculeController {
 
   async getVehiculeId(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.params;
         const vehiculeService = new VehiculeService();
   
-        await vehiculeService.GetIdVehicule(dataForm)
-            .then(async (result) => {
+        await vehiculeService.GetIdVehicule(dataForm.id)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -70,11 +70,11 @@ class VehiculeController {
 
   async editVehiculeId(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.body;
         const vehiculeService = new VehiculeService();
   
-        await vehiculeService.UpdateVehicule(dataForm)
-            .then(async (result) => {
+        await vehiculeService.UpdateVehicule(dataForm.plate, dataForm.make, dataForm.model, dataForm.year)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -92,11 +92,11 @@ class VehiculeController {
 
   async deleteVehiculeId(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.body;
         const vehiculeService = new VehiculeService();
   
-        await vehiculeService.DeleteVehicule(dataForm)
-            .then(async (result) => {
+        await vehiculeService.DeleteVehicule(dataForm.id)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })

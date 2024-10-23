@@ -12,81 +12,78 @@ const { v4: uuidv4 } = require('uuid');
 
 class UserServices {
     async ValidateUser(user) {
-        return new Promise(async (resolve) => {
+        try {
             let result = await User.findOne(
                 { where: { email: user } }
             );
             
             if (result != null) {
-                resolve(responses.RESPONSE_DATA(true, {id: result.id, password: result.password}));
+                return responses.RESPONSE_DATA(true, {id: result.id, password: result.password});
             } else {
-                resolve(responses.RESPONSE_DATA(false, errors.AUTH.INVALID_CREDENTIALS));
+                return responses.RESPONSE_DATA(false, errors.AUTH.INVALID_CREDENTIALS);
             }
-        });
+        } catch (err){
+            throw errors.DYNAMIC_GENERAL_ERROR(err);
+        }
     }
 
     async Encrypt (valueEncrypt) {
-        return new Promise((resolve) => {
             try {
                 let encrypted = cryptr.encrypt(valueEncrypt);
 
-                resolve(encrypted);
-            } catch (error) {
-                reject(`Encryption failed: ${error.message}`);
+                return encrypted;
+            } catch (err){
+                throw errors.DYNAMIC_GENERAL_ERROR(err);
             }
-        });
     }
 
     async Decrypt (valueEncrypt) {
-        return new Promise((resolve) => {
             try {
                 let decrypted = cryptr.decrypt(valueEncrypt);
 
-                resolve(decrypted);
-            } catch (error) {
-                console.log('[errrrrrr]', error)
-                reject(`Decryption failed: ${error.message}`);
+                return decrypted;
+            } catch (err){
+                throw errors.DYNAMIC_GENERAL_ERROR(err);
             }
-        });
     }
 
     async CreateUser(names, lastNames, user, passwordEncrypt) {
-        return new Promise(async (resolve, reject) => {
-            await User.create({
+        try {
+            let result = await User.create({
                 id: uuidv4(),
                 email: user.toLowerCase(),
                 names: names.toUpperCase(), 
                 lastNames: lastNames.toUpperCase(),
                 password: passwordEncrypt
-            }, (err) => {
-                if (err) {
-                reject(errors.GENERAL);
-                } else {
-                    resolve(responses.RESPONSE_CREATE_USER);
-                }
             });
-        });
+
+            if (result != null) {
+                return responses.RESPONSE_CREATE_USER;
+            } else {
+                return errors.GENERAL;
+            }
+        } catch (err){
+            throw errors.DYNAMIC_GENERAL_ERROR(err);
+        }
     }
 
     async UpdatePasswordUser(user, passwordEncrypt) {
-        return new Promise((resolve, reject) => {
-            let result = User.update(
+        try {
+            await User.update(
                 { password: passwordEncrypt },
                 { where: { email: user } }
             );
     
-            if(result =! null) {
-                resolve(responses.RESPONSE_CHANGE_PASSWORD);
-            } else {
-                reject(errors.GENERAL.ERROR);
-            }
-        });
+            return responses.RESPONSE_CHANGE_PASSWORD;
+        } catch (err){
+            throw errors.DYNAMIC_GENERAL_ERROR(err);
+        }
     }
     
     async ValidateCredentials(id, user, password, passwordEncrypt) {
-        return new Promise(async (resolve, reject) => {
+        try {
             if (password !== passwordEncrypt) {
-                reject(errors.AUTH.INVALID_CREDENTIALS);
+                throw errors.AUTH.INVALID_CREDENTIALS;
             } else {
                 let profile = {
                     user: user,
@@ -94,47 +91,57 @@ class UserServices {
     
                 profile.token = await jwtGenerator.generateLogIn({user: user, id: id});
     
-                resolve(responses.RESPONSE_DATA_MESSAGE(profile, responses.RESPONSE_SESSION_USER));
+                return responses.RESPONSE_DATA_MESSAGE(profile, responses.RESPONSE_SESSION_USER);
             }
-        });
+        } catch (err){
+            if (err.text !== undefined) {
+                throw err;
+            }
+            
+            throw errors.DYNAMIC_GENERAL_ERROR(err);
+        }
     }
     
     async SendEmailConfirm(names, lastNames, user, passwordEncrypt){
-        let profile = {
-            names: names,
-            lastNames: lastNames,
-            email: user,
-            password: passwordEncrypt
-        };
-        let jwtGenerated = await jwtGenerator.generateSignIn(profile);
-        let jwtLink = `${PATH_LINK}api/${VERSION_API}/user/confirmAccount/${jwtGenerated}`;
-        let messageHtml = templateHTLM.confirmEmail(jwtLink);
-    
-        return new Promise((resolve, reject) => {
-            transporter.sendMail({
-                from: {
-                    name: NAME_APP,
-                    address: APP_USER
-                },
-                to: user,
-                subject: 'envio de confirmación',
-                html: messageHtml
-            }, (error, info) => {
-                if (error) {
-                    reject(errors.DYNAMIC_GENERAL_ERROR('Error al enviar correo electrónico'));
-                } else {
-                    resolve(responses.RESPONSE_CREATE_ACOUNT);
-                }
+        try {
+            let profile = {
+                names: names,
+                lastNames: lastNames,
+                email: user,
+                password: passwordEncrypt
+            };
+
+            let jwtGenerated = await jwtGenerator.generateSignIn(profile);
+            let jwtLink = `${PATH_LINK}api/${VERSION_API}/user/confirmAccount/${jwtGenerated}`;
+            let messageHtml = templateHTLM.confirmEmail(jwtLink);
+        
+            return new Promise((resolve, reject) => {
+                transporter.sendMail({
+                    from: {
+                        name: NAME_APP,
+                        address: APP_USER
+                    },
+                    to: user,
+                    subject: 'envio de confirmación',
+                    html: messageHtml
+                }, (error, info) => {
+                    if (error) {
+                        reject(errors.DYNAMIC_GENERAL_ERROR('Error al enviar correo electrónico'));
+                    } else {
+                        resolve(responses.RESPONSE_CREATE_ACOUNT);
+                    }
+                });
             });
-        });
+        } catch (err){
+            throw errors.DYNAMIC_GENERAL_ERROR(err);
+        }
     }
     
     async SendEmailCreateUser(user){
-
-        let link = `${PATH_LINK}/api/${VERSION_API}/user/login`;
-        let messageHtml = templateHTLM.confirmCreateUser(link);
-    
         try {
+            let link = `${PATH_LINK}/api/${VERSION_API}/user/login`;
+            let messageHtml = templateHTLM.confirmCreateUser(link);
+        
             await transporter.sendMail({
                 from: {
                     name: 'app control cost',
@@ -144,19 +151,20 @@ class UserServices {
                 subject: 'confirmación de cuenta creada',
                 html: messageHtml
             });
-        } catch (error) {
+        } catch (err){
+            throw errors.DYNAMIC_GENERAL_ERROR(err);
         }
     }
 
     async SendEmailRenew(user){
-        let profile = {
-            user: user
-        };
-        let jwtGenerated = await jwtGenerator.generateRenew(profile);
-        let jwtLink = `${PATH_LINK}api/${VERSION_API}/user/changePassword/${jwtGenerated}`;
-        let messageHtml = templateHTLM.renewPasswordHtml(jwtLink);
-    
         try {
+            let profile = {
+                user: user
+            };
+            let jwtGenerated = await jwtGenerator.generateRenew(profile);
+            let jwtLink = `${PATH_LINK}api/${VERSION_API}/user/changePassword/${jwtGenerated}`;
+            let messageHtml = templateHTLM.renewPasswordHtml(jwtLink);
+    
             await transporter.sendMail({
                 from: {
                     name: 'app control cost',
@@ -166,7 +174,8 @@ class UserServices {
                 subject: 'solicitud de recuperación de contraseña',
                 html: messageHtml
             });
-        } catch (error) {
+        } catch (err){
+            throw errors.DYNAMIC_GENERAL_ERROR(err);
         }
     }
 }

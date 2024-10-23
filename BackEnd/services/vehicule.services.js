@@ -1,38 +1,82 @@
+const { Vehicule } = require('../models/index');
+const errors = require('../utils/errors');
+const responses = require('../utils/responses');
+const { v4: uuidv4 } = require('uuid');
+
 class VehiculeServices {
-    async ValidateVehicule(vehicule) {
-        return new Promise(async (resolve) => {
-            resolve('vehicule exist');
-        });
+    async GetIdVehicule(vehiculeId) {
+        try {
+            let result = await Vehicule.findOne(
+                { where: { id: vehiculeId}}
+            );
+
+            return responses.RESPONSE_DATA(true, {result});
+        } catch (err) {
+            throw errors.OPERATIOS_DB.ERROR(err.message);
+        }
     }
 
-    async GetIdVehicule(vehicule) {
-        return new Promise(async (resolve) => {
-            resolve('vehicule get id');
-        });
+    async GetAllVehicule(vehiculeUserId) {
+        try {
+            let result = await vehicule.findAll(
+                { where: { userId: vehiculeUserId }}
+            );
+
+            if (result != null) {
+                return responses.RESPONSE_DATA(true, {result});
+            } else {
+                return errors.ERROR_NO_DATA;
+            }
+        } catch (err) {
+            throw errors.OPERATIOS_DB.ERROR;
+        }
     }
 
-    async GetAllVehicule(vehicule) {
-        return new Promise(async (resolve) => {
-            resolve('vehicule get all');
-        });
+    async CreateVehicule(plate, make, model, year, userId) {
+        try {
+            await Vehicule.create({
+                id: uuidv4(),
+                plate: plate,
+                make: make,
+                model: model,
+                year: year,
+                userId: userId
+            });
+
+            return responses.CREATE_DINAMIC('vehicule');
+        } catch (err) {
+            throw errors.OPERATIOS_DB.ERROR(err.message);
+        }
     }
 
-    async CreateVehicule(vehicule) {
-        return new Promise(async (resolve) => {
-            resolve('vehicule create');
-        });
+    async UpdateVehicule(plate, make, model, year) {
+        try{
+            await Vehicule.update(
+                { 
+                    plate: plate,
+                    make: make,
+                    model: model,
+                    year: year
+                },
+                { where: { id: tagId}}
+            );
+
+            return responses.UPDATE_DINAMIC('vehicule');
+        } catch (err) {
+            throw errors.OPERATIOS_DB.ERROR(err.message);
+        }
     }
 
-    async UpdateVehicule(vehicule) {
-        return new Promise(async (resolve) => {
-            resolve('vehicule update');
-        });
-    }
+    async DeleteVehicule(vehiculeId) {
+        try {
+            await Vehicule.destroy(
+                { where: { id: vehiculeId}}
+            );
 
-    async DeleteVehicule(vehicule) {
-        return new Promise(async (resolve) => {
-            resolve('vehicule delete');
-        });
+            return responses.DELETE_DINAMIC('vehicule');
+        } catch (err) {
+            throw errors.OPERATIOS_DB.ERROR(err.message);
+        }
     }
 }
 

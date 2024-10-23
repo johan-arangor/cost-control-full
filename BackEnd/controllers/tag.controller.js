@@ -31,7 +31,6 @@ class TagController {
   
         await tagService.GetAllTag(dataForm.userId)
             .then(async (response) => {
-                console.log('response',response)
                 res.status(200)
                 .send(response);
             })
@@ -73,6 +72,7 @@ class TagController {
     try {
         let dataForm = req.body;
         const tagService = new TagService();
+        
         await tagService.UpdateTag(dataForm.id, dataForm.description, dataForm.categoryId)
             .then(async (response) => {
                 res.status(200)

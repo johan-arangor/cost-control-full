@@ -4,11 +4,11 @@ const errors = require('../utils/errors');
 class IncomeController {
   async newIncome(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.body;
         const incomeService = new IncomeService();
   
-        await incomeService.CreateIncome(dataForm)
-            .then(async (result) => {
+        await incomeService.CreateIncome(dataForm.description, dataForm.amount, dataForm.userId, dataForm.tags, dataForm.vehiculeId, dataForm.creditId)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -26,10 +26,10 @@ class IncomeController {
 
   async getAllIncomes(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.params;
         const incomeService = new IncomeService();
   
-        await incomeService.getAllIncome(dataForm)
+        await incomeService.getAllIncome(dataForm.userId)
             .then(async (result) => {
                 res.status(200)
                 .send(response);
@@ -48,11 +48,11 @@ class IncomeController {
 
   async getIncomeId(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.params;
         const incomeService = new IncomeService();
   
-        await incomeService.GetIdIncome(dataForm)
-            .then(async (result) => {
+        await incomeService.GetIdIncome(dataForm.Id)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -70,11 +70,11 @@ class IncomeController {
 
   async editIncomeId(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.body;
         const incomeService = new IncomeService();
   
-        await incomeService.UpdateIncome(dataForm)
-            .then(async (result) => {
+        await incomeService.UpdateIncome(dataForm.description, dataForm.amount, dataForm.tags, dataForm.vehiculeId, dataForm.creditId)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -92,11 +92,11 @@ class IncomeController {
 
   async deleteIncomeId(req, res) {
     try {
-        let dataForm = req.body.token;
+        let dataForm = req.body;
         const incomeService = new IncomeService();
   
-        await incomeService.DeleteIncome(dataForm)
-            .then(async (result) => {
+        await incomeService.DeleteIncome(dataForm.Id)
+            .then(async (response) => {
                 res.status(200)
                 .send(response);
             })
@@ -111,7 +111,6 @@ class IncomeController {
         .send(dynamicError);
     }
   }
-
 }
 
 module.exports = new IncomeController();
