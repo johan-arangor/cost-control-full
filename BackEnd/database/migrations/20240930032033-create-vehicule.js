@@ -30,6 +30,10 @@ module.exports = {
         allowNull: false,
         defaultValue: true
       },
+      userId: {
+        type: Sequelize.UUID,
+        allowNull: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
