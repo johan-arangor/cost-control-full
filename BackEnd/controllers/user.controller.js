@@ -27,10 +27,8 @@ class UserController {
                     });
                 })
                 .catch((error) => {
-                  let dynamicError = errors.DYNAMIC_GENERAL_ERROR(error.message);
-
                   res.status(500)
-                  .send(dynamicError);
+                  .send(error);
                 });
           } else {
               res.status(400)
@@ -42,10 +40,8 @@ class UserController {
           .send(error);
         });
     } catch (error) {
-        let dynamicError = errors.DYNAMIC_GENERAL_ERROR(error.message);
-
         res.status(500)
-        .send(dynamicError);
+        .send(error);
     }
   }
 
