@@ -30,17 +30,17 @@ export default function Login() {
         axios.post(`${url}/user/login`, { user: getForm.user, password: getForm.password } )
             .then((response) => {
                 Swal.fire(response.data.message)
-                // .finally(() => {
-                //     setForm({
-                //         ...getForm,
-                //         user: "",
-                //         password: ""
-                //     });
-                //     localStorage.setItem('Token-costControl', response.data.data.token);
-                //     localStorage.setItem('User-costControl', response.data.data.user);
+                .finally(() => {
+                    setForm({
+                        ...getForm,
+                        user: "",
+                        password: ""
+                    });
+                    localStorage.setItem('Token-costControl', response.data.data.token);
+                    localStorage.setItem('User-costControl', response.data.data.user);
 
-                //     navigate('/principal');
-                // });
+                    navigate('/principal');
+                });
             })
             .catch((err) => {
                 Swal.fire(err.response.data)
@@ -54,7 +54,7 @@ export default function Login() {
                     <Row className='justify-content-center'>
                         <Col lg='6' md='6' sm='12'>
                             <Container fluid style={{height: '100%'}} className='justify-content-center p-5'>
-                                <h1 class='text-center'>Bienvenid@</h1>
+                                <h1 class='text-center'>Ingresar a Financify</h1>
                                 <Form fluid style={{height: '100%'}} className='justify-content-center p-3' onSubmit={ sendForm }>
                                     <Form.Group className="mb-3" controlId="email">
                                         <Form.Label>Dirección email</Form.Label>

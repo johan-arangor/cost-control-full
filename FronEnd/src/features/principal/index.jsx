@@ -1,9 +1,16 @@
 import { Fragment, useState } from 'react';
-import imageIngreso from '../../assets/images/ingresos.png';
-import imageGasto from '../../assets/images/gastos.png';
+import { BarGraph } from '../../components/charts/bar';
+// import imageIngreso from '../../assets/images/ingresos.png';
+// import imageGasto from '../../assets/images/gastos.png';
 import '../../../src/assets/css/principal.css';
 import { Container, Card, Row, Col, Image } from 'react-bootstrap';
-import Revenues from './Revenues';
+// import Revenues from './Revenues';
+import { BarChart, Bar } from 'recharts';
+
+const dataFake = [
+    {value: "Previsto", valor: 230000},
+    {value: "Real", valor: 450000}
+];
 
 export default function Principal() {
     const [getModalRevenues, setModalRevenues] = useState(false);
@@ -14,42 +21,34 @@ export default function Principal() {
 
     return(
         <Fragment>
-            <Container>
-                <Card border='0' className='m-5 shadow-lg'>
-                    <Card.Header className='text-center'>
-                        <h1>BIENVENIDO</h1>
-                    </Card.Header>
-                    <Card.Title className='text-center'>
-                        <h3>Tú balance <span style={{color: 'green'}}>20.000</span></h3>
-                    </Card.Title>
-                    <Row className='text-center'>
-                        <Col md={6} sm={12}>
-                            <Container 
-                                className='buttonPpal ingreso'
-                                onClick={() => setModalRevenues(true)}
-                            >
-                                <Row>
-                                    <h2>Registros</h2>
-                                </Row>
-                                {/* <Row>
-                                    <Image src={ imageIngreso } fluid width={300} height={300} border='0' title='Registros' />
-                                </Row> */}
-                            </Container>
-                        </Col>
-                        <Col md={6} sm={12}>
-                            <Container className='buttonPpal egreso'>
-                                <Image src={ imageGasto } fluid width={300} height={300} border='0' />
-                            </Container>
+            <Row>
+                <Col xs={{ order: 'first' }}>
+                    <Row>
+                        <Col xs={12} md={12} lg={12}>Grafico Torta</Col>
+                    </Row>
+                    <Row>
+                        <Col xs={12} md={12} lg={12}>
+                            <BarGraph 
+                                data={dataFake} 
+                                dataKeyName="value"
+                                dataKeyValue="valor"
+                            />
                         </Col>
                     </Row>
-                </Card>
-            </Container>
-            {getModalRevenues && (
-                <Revenues
-                    stateModalRevenue={stateModalRevenue}
-                    getStateModal={getModalRevenues}
-                />
-            )}
+                    <Row>
+                        <Col xs={12} md={12} lg={12}>Efectivo Valor</Col>
+                    </Row>
+                </Col>
+                <Col xs={{ order: 'last' }}>
+                    <Row>
+                        <Col xs={6} md={6} lg={6}>Objetivos</Col>
+                        <Col xs={6} md={6} lg={6}>Pagos Programados</Col>
+                    </Row>
+                    <Row>
+                        <Col xs={12} md={12} lg={12}>Calendario</Col>
+                    </Row>
+                </Col>
+            </Row>
         </Fragment>
     );
 }
