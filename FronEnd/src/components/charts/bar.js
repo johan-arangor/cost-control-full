@@ -1,17 +1,17 @@
 import { Fragment } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Bar } from 'react-chartjs-2';
+import { Chart as chartjs, Title, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
 
-export const BarGraph = ({ data, dataKeyValue, dataKeyName }) => {
-    return (
+chartjs.register(Title, Tooltip, Legend, CategoryScale, LinearScale, BarElement)
+
+export const BarGraphComponent = ({ data }) => {
+    const options = {
+        indexAxis: 'y'
+    }
+
+    return (        
         <Fragment>
-                <BarChart data={data} width={500} height={300}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey={dataKeyName} />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey={dataKeyValue} fill='#8874d8'/>
-                </BarChart>
+            <Bar data={data} options={options} />
         </Fragment>
     );
 }
