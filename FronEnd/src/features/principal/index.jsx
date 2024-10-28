@@ -4,10 +4,11 @@ import moment from 'moment'
 import { BarGraphComponent } from '../../components/charts/bar';
 import { DonutGraphComponent } from '../../components/charts/Doughnut';
 import "react-big-calendar/lib/css/react-big-calendar.css";
+
 // import imageIngreso from '../../assets/images/ingresos.png';
 // import imageGasto from '../../assets/images/gastos.png';
 import '../../../src/assets/css/principal.css';
-import { Container, Card, Row, Col, InputGroup, Form, Image } from 'react-bootstrap';
+import { Card, Row, Col, InputGroup, Form } from 'react-bootstrap';
 // import Revenues from './Revenues';
 
 const dataBar = {
@@ -45,6 +46,34 @@ const dataDonut = {
         hoverOffset: 4
       }]    
 };
+
+const dataCalendar = [
+    {
+      "title": "Pago arriendo",
+      "start": "2024-10-03T14:30:00.000Z",
+      "end": "2024-10-03T20:30:00.000Z"
+    },
+    {
+      "title": "Mercar",
+      "start": "2024-10-05T16:00:00.000Z",
+      "end": "2024-10-05T18:00:00.000Z"
+    },
+    {
+      "title": "Servicios",
+      "start": "2024-10-17T16:00:00.000Z",
+      "end": "2024-10-17T18:00:00.000Z"
+    },
+    {
+      "title": "Credito Flamingo",
+      "start": "2024-10-22T16:00:00.000Z",
+      "end": "2024-10-22T18:00:00.000Z"
+    },
+    {
+      "title": "Pago tarjeta Credito",
+      "start": "2024-10-25T16:00:00.000Z",
+      "end": "2024-10-25T18:00:00.000Z"
+    }
+];
 
 const localizer = momentLocalizer(moment)
 
@@ -107,6 +136,7 @@ export default function Principal() {
                         <Col xs={12} md={12} lg={12}>
                             <Calendar 
                                 localizer={localizer}
+                                events={dataCalendar}
                                 style={{ height: '77vh' }}
                             />
                         </Col>
