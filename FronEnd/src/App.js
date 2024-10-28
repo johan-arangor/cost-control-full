@@ -4,8 +4,8 @@ import Layout from './components/layout/layout';
 import Login from './features/login/index';
 import Signup from './features/signup/index';
 import Principal from './features/principal/index';
+import RenewPassword from './features/login/indexRenewPassword';
 // import ConfirmAccount from './features/signup/indexConfirmAccount';
-// import RenewPassword from './features/login/indexRenewPassword';
 // import ChangePassword from './features/login/indexChangePassword';
 // import Settings from './features/settings/index';
 // import EntitysPrincipal from './features/entitys/index';
@@ -21,9 +21,9 @@ function App() {
             <Route exact path="/" element={<Login />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/signup" element={<Signup />} />
+            <Route exact path="/renewPassword" element={<RenewPassword />} />
             <Route exact path="/principal" element={<Principal />} />
             {/* <Route exact path="/confirmAccount/:token" element={<ConfirmAccount />} />
-            <Route exact path="/renewPassword" element={<RenewPassword />} />
             <Route exact path="/changePassword/:token" element={<ChangePassword />} />
             <Route exact path="/settings" element={<Settings />} />
             <Route exact path="/entitys" element={<EntitysPrincipal />} />
