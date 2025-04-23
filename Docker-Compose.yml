@@ -2,7 +2,7 @@ services:
   backend:
     container_name: back-costcontrol-nodejs
     build:
-      context: ./Backend
+      context: ./BackEnd
       dockerfile: Dockerfile
     ports:
       - "9000:9000"
@@ -18,16 +18,14 @@ services:
   frontend:
     container_name: front-costcontrol-reactjs
     build:
-      context: ./Frontend
+      context: ./Fronend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
-      - ./Frontend:/app
+      - ./FronEnd:/app
     depends_on:
       - backend
-    environment:
-      - CHOKIDAR_USEPOLLING=true
     networks:
       - costcontrol_network
 
