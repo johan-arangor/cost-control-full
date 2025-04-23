@@ -14,11 +14,16 @@ module.exports = {
         allowNull: false
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       amount: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false
+      },
+      observation: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       userId: {
         type: Sequelize.UUID,

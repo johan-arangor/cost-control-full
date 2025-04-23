@@ -1,3 +1,4 @@
+const Helpers = require('../utils/helpers');
 const { Expense } = require('../models/index');
 const errors = require('../utils/errors');
 const responses = require('../utils/responses');
@@ -33,15 +34,18 @@ class ExpenseServices {
         }
     }
 
-    async CreateExpense(description, amount, userId, tags, vehiculeId, creditId) {
+    async CreateExpense(description, amount, observation, userId, tags, vehiculeId, creditId) {
+        const helper = new Helpers();
+        
         try {
             await Expense.create({
                 id: uuidv4(),
                 dateEntry: moment().format("YYYY-MM-DD"),
                 description: description,
                 amount: amount,
+                observation: observation,
                 userId: userId,
-                tags: tags,
+                tags: helper.arrayParseString(tags),
                 vehiculeId: vehiculeId,
                 creditId: creditId
             });

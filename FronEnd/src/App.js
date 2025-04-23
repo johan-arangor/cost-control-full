@@ -5,6 +5,8 @@ import Login from './features/login/index';
 import Signup from './features/signup/index';
 import Principal from './features/principal/index';
 import RenewPassword from './features/login/indexRenewPassword';
+import IncomePrincipal from './features/incomes/index';
+import ExpensePrincipal from './features/expenses/index';
 // import ConfirmAccount from './features/signup/indexConfirmAccount';
 // import ChangePassword from './features/login/indexChangePassword';
 // import Settings from './features/settings/index';
@@ -23,6 +25,8 @@ function App() {
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/renewPassword" element={<RenewPassword />} />
             <Route exact path="/principal" element={<Principal />} />
+            <Route exact path="/incomes" element={<IncomePrincipal />} />
+            <Route exact path="/expenses" element={<ExpensePrincipal />} />
             {/* <Route exact path="/confirmAccount/:token" element={<ConfirmAccount />} />
             <Route exact path="/changePassword/:token" element={<ChangePassword />} />
             <Route exact path="/settings" element={<Settings />} />

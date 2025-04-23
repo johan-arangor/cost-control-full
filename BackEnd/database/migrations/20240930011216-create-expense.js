@@ -21,6 +21,10 @@ module.exports = {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false
       },
+      observation: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       userId: {
         type: Sequelize.UUID,
         references: {

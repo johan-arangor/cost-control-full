@@ -24,9 +24,9 @@ export default function RenewPassword() {
     async function sendForm(e){
         e.preventDefault();
 
-        axios.post(`${url}/users/renewAccount`, { user: getForm.userName } )
+        axios.post(`${url}/user/renewAccount`, { user: getForm.userName } )
             .then((response) => {
-                Swal.fire(response.data.message)
+                Swal.fire(response.data)
                 .finally(() => {
                     setForm({
                         ...getForm,

@@ -11,12 +11,28 @@ const cryptr = new Cryptr(SECRETORPRIVATEKEY);
 const { v4: uuidv4 } = require('uuid');
 
 class UserServices {
-    async ValidateUser(user) {
+    async GetIdUser(user) {
         try {
             let result = await User.findOne(
                 { where: { email: user } }
             );
             
+            if (result != null) {
+                return result.id;
+            } else {
+                return responses.RESPONSE_DATA(false, errors.AUTH.USER_NOT_FOUND);
+            }
+        } catch (err){
+            throw errors.DYNAMIC_GENERAL_ERROR(err);
+        }
+    }
+
+    async ValidateUser(user) {
+        try {
+            let result = await User.findOne(
+                { where: { email: user } }
+            );
+            console.log('result', result)
             if (result != null) {
                 return responses.RESPONSE_DATA(true, {id: result.id, password: result.password});
             } else {
@@ -144,7 +160,7 @@ class UserServices {
         
             await transporter.sendMail({
                 from: {
-                    name: 'app control cost',
+                    name: NAME_APP,
                     address: APP_USER
                 },
                 to: user,
@@ -167,7 +183,7 @@ class UserServices {
     
             await transporter.sendMail({
                 from: {
-                    name: 'app control cost',
+                    name: NAME_APP,
                     address: APP_USER
                 },
                 to: user,

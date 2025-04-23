@@ -1,20 +1,20 @@
 import { Fragment } from "react";
 import {Container, Navbar, Nav, NavDropdown} from 'react-bootstrap';
-import showModalIncomesAdd from "../modals/addIncome";
-import showModalExponcesAdd from "../modals/addExpense";
-import showModalVehiculeAdd from "../modals/addVehicule";
+import ShowModalIncomesAdd from "../modals/addIncome";
+import ShowModalExponcesAdd from "../modals/addExpense";
+import ShowModalVehiculeAdd from "../modals/addVehicule";
 
 export default function Menu(){
     const openIncomesAdd = () => {
-        showModalIncomesAdd();
+        ShowModalIncomesAdd();
     };
 
     const openExponsesAdd = () => {
-        showModalExponcesAdd();
+        ShowModalExponcesAdd();
     };
 
     const openVehiculeAdd = () => {
-        showModalVehiculeAdd();
+        ShowModalVehiculeAdd();
     };
 
     return(
@@ -28,11 +28,11 @@ export default function Menu(){
                             <Nav.Link href="/Principal">Home</Nav.Link>
                             <NavDropdown title="Ingresos" id="basic-nav-dropdown">
                                 <NavDropdown.Item href="#" onClick={openIncomesAdd}>Registrar Nuevo</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/1.2">Ver Historial</NavDropdown.Item>
+                                <NavDropdown.Item href="/incomes">Ver Historial</NavDropdown.Item>
                             </NavDropdown>
                             <NavDropdown title="Gastos" id="basic-nav-dropdown">
                                 <NavDropdown.Item href="#" onClick={openExponsesAdd}>Registrar Nuevo</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/2.2">Ver Historial</NavDropdown.Item>
+                                <NavDropdown.Item href="/expenses">Ver Historial</NavDropdown.Item>
                             </NavDropdown>
                             <NavDropdown title="Vehículos" id="basic-nav-dropdown">
                                 <NavDropdown.Item href="#action/3.1">Ingreso</NavDropdown.Item>

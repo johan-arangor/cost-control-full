@@ -94,7 +94,6 @@ class UserController {
 
       await jwtGenerator.decodeJwt(req.params.id)
         .then(async (jwtDecode) => {
-          console.log('jwtDecode',jwtDecode)
             await userService.ValidateUser(jwtDecode.email)
             .then(async (validateUser) => {
               if (!validateUser.status){
