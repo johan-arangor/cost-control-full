@@ -1,3 +1,4 @@
+const Helpers = require('../utils/helpers');
 const { Income } = require('../models/index');
 const errors = require('../utils/errors');
 const responses = require('../utils/responses');
@@ -17,10 +18,10 @@ class IncomeServices {
         }
     }
 
-    async GetAllIncome(tagUserId) {
+    async GetAllIncome(userId) {
         try {
             let result = await Income.findAll(
-                { where: { userId: tagUserId }}
+                { where: { userId: userId }}
             );
 
             if (result != null) {
@@ -33,20 +34,23 @@ class IncomeServices {
         }
     }
 
-    async CreateIncome(description, amount, userId, tags, vehiculeId, creditId) {
+    async CreateIncome(description, amount, observation, userId, tags, vehiculeId, creditId) {
+        const helper = new Helpers();
+
         try {
             await Income.create({
                 id: uuidv4(),
                 dateEntry: moment().format("YYYY-MM-DD"),
                 description: description,
                 amount: amount,
+                observation: observation,
                 userId: userId,
-                tags: tags,
+                tags: helper.arrayParseString(tags),
                 vehiculeId: vehiculeId,
                 creditId: creditId
             });
 
-            return responses.CREATE_DINAMIC('exponse');
+            return responses.CREATE_DINAMIC('ingreso');
         } catch (err) {
             throw errors.OPERATIOS_DB.ERROR(err.message);
         }
@@ -68,7 +72,7 @@ class IncomeServices {
                 { where: { id: tagId}}
             );
 
-            return responses.UPDATE_DINAMIC('tag');
+            return responses.UPDATE_DINAMIC('ingreso');
         } catch (err) {
             throw errors.OPERATIOS_DB.ERROR(err.message);
         }
@@ -80,7 +84,7 @@ class IncomeServices {
                 { where: { id: incomeId}}
             );
 
-            return responses.DELETE_DINAMIC('tag');
+            return responses.DELETE_DINAMIC('ingreso');
         } catch (err) {
             throw errors.OPERATIOS_DB.ERROR(err.message);
         }
