@@ -1,7 +1,21 @@
+import React from 'react';
 import Swal from 'sweetalert2';
+import SelectTags from '../selects/tags';
+import ReactDOM from 'react-dom/client';
+import axios from 'axios';
+import { url, user } from "../../globals";
 
-const showModalVehiculeAdd = async () => {
+const sendData = async (dataSend) => {
+    await axios.post(`${url}/vehicule`, dataSend)
+        .then((result) => {
+            Swal.fire(result.data);
+        })
+        .catch((error) => {
+            Swal.fire(error.response.data);
+        });
+}
 
+export default async function ShowModalVehiculeAdd() {
     const { value: formValues } = await Swal.fire({
         title: 'Agregar Vehículo',
         html: `
@@ -38,5 +52,3 @@ const showModalVehiculeAdd = async () => {
         console.log('Año:', formValues.year);
     }
 };
-
-export default showModalVehiculeAdd;

@@ -63,15 +63,18 @@ const colourStyles = {
   }),
 };
 
-export default function SelectTags() {
-    console.log('colourOptions', colourOptions)
-    return (
-        <Select
-            closeMenuOnSelect={false}
-            defaultValue={[colourOptions[0], colourOptions[1]]}
-            isMulti
-            options={colourOptions}
-            // styles={colourStyles}
-        />
-    );
+export default function SelectTags({ onChange }) {
+  const handleChange = (selectedOptions) => {
+    onChange(selectedOptions);
+  };
+
+  return (
+    <Select
+      closeMenuOnSelect={false}
+      isMulti
+      options={colourOptions}
+      onChange={handleChange}
+      // styles={colourStyles}
+    />
+  );
 };
