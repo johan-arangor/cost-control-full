@@ -10,4 +10,6 @@ RUN npm install
 
 EXPOSE 9000
 
-CMD ["npm", "start"]
+CMD npm run start:dev && npx sequelize-cli db:seed:all
+# RUN npm run start:prod
+# RUN npx sequelize-cli seed:generate --name nombre_del_seeder
