@@ -6,12 +6,12 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.DataTypes.UUIDV4
       },
       plate: {
         type: Sequelize.STRING,
-        allowNull: fase
+        allowNull: false
       },
       make: {
         type: Sequelize.STRING,

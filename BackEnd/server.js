@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //Cors
-app.use(cors({origin:true}))
+app.use(cors({ origin: true }))
 
 //routers
 try {
@@ -32,15 +32,15 @@ app.listen(PORT_BACK, () => {
 
   //COMENT=>sequelize.sync({ force: true })//para hacer la sincronizacion de la bd
   //COMENT=>sincroniza la bd sin alterar los datos almacenados
-  // sequelize.sync({ alter: true })
-  // .then(() => {
-  //   console.log('Se ha establecido la conexión');
-  // });
+  sequelize.sync({ alter: true })
+    .then(() => {
+      console.log('Se ha establecido la conexión');
+    });
   sequelize.authenticate()
-  .then(() => {
-    console.log('Conexión exitosa a la base de datos');
-  })
-  .catch((error) => {
-    console.error('Error al conectar a la base de datos:', error);
-  });
+    .then(() => {
+      console.log('Conexión exitosa a la base de datos');
+    })
+    .catch((error) => {
+      console.error('Error al conectar a la base de datos:', error);
+    });
 });
