@@ -17,7 +17,7 @@ jwtController.generateRenew = (dataUser) => {
 }
 
 jwtController.decodeJwt = (jwtString) => {
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
         let decodeJWT = jwt.decode(jwtString);
 
         if (Date.now() >= decodeJWT.exp * 1000) {
@@ -30,8 +30,8 @@ jwtController.decodeJwt = (jwtString) => {
 
 function generateJWT(data, time) {
     return new Promise((resolve, reject) => {
-        let token = jwt.sign(data, 
-            process.env.SECRETORPRIVATEKEY , {
+        let token = jwt.sign(data,
+            process.env.SECRETORPRIVATEKEY, {
             expiresIn: time
         });
 

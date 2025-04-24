@@ -6,7 +6,7 @@ const responses = require('../utils/responses');
 const jwtGenerator = require('../middleware/generateJwt');
 const transporter = require('../middleware/configEmail');
 const templateHTLM = require('../templates/users.templates');
-const { SECRETORPRIVATEKEY, PATH_LINK, VERSION_API, NAME_APP, APP_USER } = process.env;
+const { SECRETORPRIVATEKEY, PATH_LINK, PATH_LINK_FRONT, VERSION_API, NAME_APP, APP_USER } = process.env;
 const cryptr = new Cryptr(SECRETORPRIVATEKEY);
 const { v4: uuidv4 } = require('uuid');
 
@@ -16,13 +16,13 @@ class UserServices {
             let result = await User.findOne(
                 { where: { email: user } }
             );
-            
+
             if (result != null) {
                 return result.id;
             } else {
                 return responses.RESPONSE_DATA(false, errors.AUTH.USER_NOT_FOUND);
             }
-        } catch (err){
+        } catch (err) {
             throw errors.DYNAMIC_GENERAL_ERROR(err);
         }
     }
@@ -32,35 +32,36 @@ class UserServices {
             let result = await User.findOne(
                 { where: { email: user } }
             );
-            console.log('result', result)
             if (result != null) {
-                return responses.RESPONSE_DATA(true, {id: result.id, password: result.password});
+                return responses.RESPONSE_DATA(true, { id: result.id, password: result.password });
             } else {
                 return responses.RESPONSE_DATA(false, errors.AUTH.INVALID_CREDENTIALS);
             }
-        } catch (err){
+        } catch (err) {
             throw errors.DYNAMIC_GENERAL_ERROR(err);
         }
     }
 
-    async Encrypt (valueEncrypt) {
-            try {
-                let encrypted = cryptr.encrypt(valueEncrypt);
+    async Encrypt(valueEncrypt) {
+        try {
+            let encrypted = cryptr.encrypt(valueEncrypt);
 
-                return encrypted;
-            } catch (err){
-                throw errors.DYNAMIC_GENERAL_ERROR(err);
-            }
+            return encrypted;
+        } catch (err) {
+            throw errors.DYNAMIC_GENERAL_ERROR(err);
+        }
     }
 
-    async Decrypt (valueEncrypt) {
-            try {
-                let decrypted = cryptr.decrypt(valueEncrypt);
+    async Decrypt(valueEncrypt) {
+        try {
+            console.log('valueEncrypt', valueEncrypt)
+            let decrypted = cryptr.decrypt(valueEncrypt);
+            console.log('decrypted', decrypted)
 
-                return decrypted;
-            } catch (err){
-                throw errors.DYNAMIC_GENERAL_ERROR(err);
-            }
+            return decrypted;
+        } catch (err) {
+            throw errors.DYNAMIC_GENERAL_ERROR(err);
+        }
     }
 
     async CreateUser(names, lastNames, user, passwordEncrypt) {
@@ -68,7 +69,7 @@ class UserServices {
             let result = await User.create({
                 id: uuidv4(),
                 email: user.toLowerCase(),
-                names: names.toUpperCase(), 
+                names: names.toUpperCase(),
                 lastNames: lastNames.toUpperCase(),
                 password: passwordEncrypt
             });
@@ -78,7 +79,7 @@ class UserServices {
             } else {
                 return errors.GENERAL;
             }
-        } catch (err){
+        } catch (err) {
             throw errors.DYNAMIC_GENERAL_ERROR(err);
         }
     }
@@ -89,13 +90,13 @@ class UserServices {
                 { password: passwordEncrypt },
                 { where: { email: user } }
             );
-    
+
             return responses.RESPONSE_CHANGE_PASSWORD;
-        } catch (err){
+        } catch (err) {
             throw errors.DYNAMIC_GENERAL_ERROR(err);
         }
     }
-    
+
     async ValidateCredentials(id, user, password, passwordEncrypt) {
         try {
             if (password !== passwordEncrypt) {
@@ -104,21 +105,21 @@ class UserServices {
                 let profile = {
                     user: user,
                 };
-    
-                profile.token = await jwtGenerator.generateLogIn({user: user, id: id});
-    
+
+                profile.token = await jwtGenerator.generateLogIn({ user: user, id: id });
+
                 return responses.RESPONSE_DATA_MESSAGE(profile, responses.RESPONSE_SESSION_USER);
             }
-        } catch (err){
+        } catch (err) {
             if (err.text !== undefined) {
                 throw err;
             }
-            
+
             throw errors.DYNAMIC_GENERAL_ERROR(err);
         }
     }
-    
-    async SendEmailConfirm(names, lastNames, user, passwordEncrypt){
+
+    async SendEmailConfirm(names, lastNames, user, passwordEncrypt) {
         try {
             let profile = {
                 names: names,
@@ -130,7 +131,7 @@ class UserServices {
             let jwtGenerated = await jwtGenerator.generateSignIn(profile);
             let jwtLink = `${PATH_LINK}api/${VERSION_API}/user/confirmAccount/${jwtGenerated}`;
             let messageHtml = templateHTLM.confirmEmail(jwtLink);
-        
+
             return new Promise((resolve, reject) => {
                 transporter.sendMail({
                     from: {
@@ -148,16 +149,16 @@ class UserServices {
                     }
                 });
             });
-        } catch (err){
+        } catch (err) {
             throw errors.DYNAMIC_GENERAL_ERROR(err);
         }
     }
-    
-    async SendEmailCreateUser(user){
+
+    async SendEmailCreateUser(user) {
         try {
             let link = `${PATH_LINK}/api/${VERSION_API}/user/login`;
             let messageHtml = templateHTLM.confirmCreateUser(link);
-        
+
             await transporter.sendMail({
                 from: {
                     name: NAME_APP,
@@ -167,20 +168,20 @@ class UserServices {
                 subject: 'confirmación de cuenta creada',
                 html: messageHtml
             });
-        } catch (err){
+        } catch (err) {
             throw errors.DYNAMIC_GENERAL_ERROR(err);
         }
     }
 
-    async SendEmailRenew(user){
+    async SendEmailRenew(user) {
         try {
             let profile = {
                 user: user
             };
             let jwtGenerated = await jwtGenerator.generateRenew(profile);
-            let jwtLink = `${PATH_LINK}api/${VERSION_API}/user/changePassword/${jwtGenerated}`;
+            let jwtLink = `${PATH_LINK_FRONT}changePassword/${jwtGenerated}`;
             let messageHtml = templateHTLM.renewPasswordHtml(jwtLink);
-    
+
             await transporter.sendMail({
                 from: {
                     name: NAME_APP,
@@ -190,7 +191,7 @@ class UserServices {
                 subject: 'solicitud de recuperación de contraseña',
                 html: messageHtml
             });
-        } catch (err){
+        } catch (err) {
             throw errors.DYNAMIC_GENERAL_ERROR(err);
         }
     }
